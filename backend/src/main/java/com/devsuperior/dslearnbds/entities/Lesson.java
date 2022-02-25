@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -23,8 +22,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tb_lesson")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Lesson implements Serializable{
-
+public abstract class Lesson implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -41,17 +39,20 @@ public abstract class Lesson implements Serializable{
 	private List<Deliver> deliveries = new ArrayList<>();
 	
 	@ManyToMany
-	@JoinTable(name = "tb_lessons_done", 
-		joinColumns = @JoinColumn(name = "lesson_id"), 
-		inverseJoinColumns = {@JoinColumn(name = "user_id"),
-							  @JoinColumn(name = "offer_id")})
+	@JoinTable(name = "tb_lessons_done",
+		joinColumns = @JoinColumn(name = "lesson_id"),
+		inverseJoinColumns = {
+				@JoinColumn(name = "user_id"),
+				@JoinColumn(name = "offer_id")
+		}
+	)
 	private Set<Enrollment> enrollmentsDone = new HashSet<>();
 	
 	public Lesson() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public Lesson(Long id, String title, Integer position, Section section) {
+		super();
 		this.id = id;
 		this.title = title;
 		this.position = position;
@@ -94,9 +95,16 @@ public abstract class Lesson implements Serializable{
 		return enrollmentsDone;
 	}
 
+	public List<Deliver> getDeliveries() {
+		return deliveries;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	@Override
@@ -108,6 +116,11 @@ public abstract class Lesson implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Lesson other = (Lesson) obj;
-		return Objects.equals(id, other.id);
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }
