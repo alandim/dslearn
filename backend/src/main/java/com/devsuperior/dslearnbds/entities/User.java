@@ -44,12 +44,12 @@ public class User implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public User(Long id, String name, String email, String password, Set<Role> roles) {
+	public User(Long id, String name, String email, String password) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.setPassword(password);
-		this.setRoles(roles);
+		this.password = password;
 	}
 
 	public Long getId() {
